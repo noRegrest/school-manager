@@ -5,6 +5,8 @@ import AppDataSource from "./data-source";
 
 AppDataSource.initialize().then(() => {
   let app = express();
+  // app.use("/api/v1/students", studentRouter);
+
   let port = PORT;
   const server = app.listen(port, () => {
     console.clear();

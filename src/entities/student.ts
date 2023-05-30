@@ -19,15 +19,8 @@ export class Student {
   @Column("date")
   dob: string;
 
-  @Column("int")
-  grade: number;
-
   @Column("varchar", { length: 255, unique: true })
   code: string;
-
-  // @ManyToMany(() => Test)
-  // @JoinTable()
-  // stu_sub: Test[];
 
   @ManyToMany(() => Subject)
   @JoinTable()

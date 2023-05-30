@@ -1,13 +1,20 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from "typeorm";
 import { Student } from "./student";
 import { Test } from "./test";
 
 @Entity()
+@Unique(["student", "test"])
 export class StudentTest {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   grade: number;
 
   @ManyToOne(() => Student)
