@@ -1,17 +1,32 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  Unique,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  ManyToOne,
+} from "typeorm";
+import { Student } from "./student";
 import { Teacher } from "./teacher";
 
-@Entity()
-export class Test {
-  @PrimaryGeneratedColumn()
-  id: number;
+@Entity("Test")
+@Unique("unique_test_code", ["Code"])
+export class Test extends BaseEntity {
+  @PrimaryGeneratedColumn("increment", {
+    primaryKeyConstraintName: "pk_test",
+  })
+  Id: number;
 
-  @Column()
-  name: string;
+  @Column({ type: "varchar", length: 255 })
+  Code: string;
 
-  @ManyToOne(() => Teacher)
-  teacher: Teacher[];
+  @Column({ type: "text", nullable: true })
+  Description: string;
 
-  @Column("varchar", { length: 255, unique: true })
-  code: string;
+  @ManyToMany(() => Student, (student) => student.Tests)
+  Students?: Student[];
+
+  @ManyToOne(() => Teacher, (teacher) => teacher.Tests)
+  Teachers: Teacher;
 }

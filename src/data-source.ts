@@ -19,6 +19,7 @@ import { Test } from "./entities/test";
 import { Student } from "./entities/student";
 import { Subject } from "./entities/subject";
 import { StudentTest } from "./entities/student-test";
+import { StudentSubject } from "./entities/student-subject";
 
 const postgresConfig = {
   host: Postgres.Host,
@@ -35,7 +36,7 @@ const AppDataSource = new DataSource({
   synchronize: true, //constants.IsProd ? false : true,
   logging: true, // constants.IsProd ? false : true,
   migrations: ["../migration"],
-  entities: [Teacher, Test, Subject, Student, StudentTest],
+  entities: [Teacher, Subject, Student, StudentSubject, Test, StudentTest],
 });
 
 export default AppDataSource;
