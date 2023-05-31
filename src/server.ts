@@ -5,14 +5,14 @@ import AppDataSource from "./data-source";
 import studentRouter from "./routes/student.route";
 
 AppDataSource.initialize().then(() => {
-  let app = express();
-  app.use(express.json());
-  app.use("/api/v1/students", studentRouter);
+	let app = express();
+	app.use(express.json());
+	app.use("/students", studentRouter);
 
-  let port = PORT;
-  const server = app.listen(port, () => {
-    console.clear();
-    console.log("===================");
-    console.log("Server listen at http://localhost:%s", PORT);
-  });
+	let port = PORT;
+	const server = app.listen(port, () => {
+		console.clear();
+		console.log("===================");
+		console.log("Server listen at http://localhost:%s", PORT);
+	});
 });

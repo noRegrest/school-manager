@@ -1,11 +1,11 @@
 import express from "express";
 import {
-  addStudentHandler,
-  deleteStudentHandler,
-  getAllStudentHandler,
-  getOneStudentHandler,
-  updateStudentHandler,
-} from "../controller/common/studentHandler";
+	addStudentHandler,
+	deleteStudentHandler,
+	getAllStudentHandler,
+	getOneStudentHandler,
+	updateStudentHandler,
+} from "../controller/common/student.handler";
 
 const router = express.Router();
 
