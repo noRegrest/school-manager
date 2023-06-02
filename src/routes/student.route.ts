@@ -5,15 +5,14 @@ import {
 	getAllStudentHandler,
 	getOneStudentHandler,
 	updateStudentHandler,
-} from "../controller/common/student.handler";
+} from "../controller/common/student.controller";
 
-const router = express.Router();
+const studentRouter = express.Router();
 
-//student
-router.post("/get", getAllStudentHandler);
-router.post("/get/:code", getOneStudentHandler);
-router.post("/add", addStudentHandler);
-router.post("/update", updateStudentHandler);
-router.post("/delete", deleteStudentHandler);
+studentRouter.post("/get", getAllStudentHandler);
+studentRouter.post("/get/:Code", getOneStudentHandler);
+studentRouter.post("/add", addStudentHandler);
+studentRouter.post("/update", updateStudentHandler);
+studentRouter.post("/delete", deleteStudentHandler);
 
-export default router;
+export default studentRouter;

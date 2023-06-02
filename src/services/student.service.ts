@@ -7,10 +7,10 @@ const repository = AppDataSource.getRepository(Student);
 export const findStudentAll = async (
 	_filter: Partial<Student> = {},
 	order: FindOptionsOrder<Student> = { Id: "ASC" }
-): Promise<ResponseData<Student[]>> => {
+): Promise<ResponseData<Student[] | null>> => {
 	var response: ResponseData<Student[]> = { status: false };
 	try {
-		var where: FindOptionsWhere<Student>[] = [];
+		var where: FindOptionsWhere<Student> = {};
 
 		var data = await repository.find({
 			where,
@@ -40,7 +40,8 @@ export const findOneStudent = async (
 	var response: ResponseData<Student | null> = { status: false };
 
 	try {
-		var where: FindOptionsWhere<Student>[] = [];
+		var where: FindOptionsWhere<Student> = {};
+		if (_filter.Code) where.Code = _filter.Code;
 		var data = await repository.findOne({
 			where,
 			order,
@@ -67,11 +68,10 @@ export const addStudent = async (
 	var response: ResponseData = { status: false };
 	try {
 		var data = repository.create({ ...input });
-		data = await await repository.save(data);
+		data = await repository.save(data);
 		return {
 			...response,
 			status: true,
-			data,
 		};
 	} catch (e) {
 		var message = "";
@@ -101,7 +101,6 @@ export const updateStudent = async (
 		return {
 			...response,
 			status: true,
-			data,
 		};
 	} catch (e) {
 		var message = "";
@@ -123,7 +122,6 @@ export const deleteStudent = async (
 		return {
 			...response,
 			status: true,
-			data,
 		};
 	} catch (e) {
 		var message = "";

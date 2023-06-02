@@ -1,16 +1,17 @@
-import { FindOptionsOrder, FindOptionsWhere } from "typeorm";
+import { FindOptionsOrder, FindOptionsWhere, ILike } from "typeorm";
 import AppDataSource from "../data-source";
-import { Teacher } from "../entities/teacher";
+import User from "../entities/user";
 import { ResponseData } from "../schemas/common.schema";
-const repository = AppDataSource.getRepository(Teacher);
+import { ResMessageCommon } from "../../constants";
+const repository = AppDataSource.getRepository(User);
 
-export const findTeacherAll = async (
-	_filter: Partial<Teacher> = {},
-	order: FindOptionsOrder<Teacher> = { Id: "ASC" }
-): Promise<ResponseData<Teacher[] | null>> => {
-	var response: ResponseData<Teacher[]> = { status: false };
+export const findUserAll = async (
+	_filter: Partial<User> = {},
+	order: FindOptionsOrder<User> = { Id: "ASC" }
+): Promise<ResponseData<User[]>> => {
+	var response: ResponseData<User[]> = { status: false };
 	try {
-		var where: FindOptionsWhere<Teacher> = {};
+		var where: FindOptionsWhere<User> = {};
 
 		var data = await repository.find({
 			where,
@@ -33,15 +34,15 @@ export const findTeacherAll = async (
 	}
 };
 
-export const findOneTeacher = async (
-	_filter: Partial<Teacher>,
-	order: FindOptionsOrder<Teacher> = { Id: "ASC" }
-): Promise<ResponseData<Teacher | null>> => {
-	var response: ResponseData<Teacher | null> = { status: false };
+export const findOneUser = async (
+	_filter: Partial<User>,
+	order: FindOptionsOrder<User> = { Id: "ASC" }
+): Promise<ResponseData<User | null>> => {
+	var response: ResponseData<User | null> = { status: false };
 
 	try {
-		var where: FindOptionsWhere<Teacher> = {};
-		if (_filter.Code) where.Code = _filter.Code;
+		var where: FindOptionsWhere<User> = {};
+		// if (_filter.Code) where.Code = _filter.Code;
 		var data = await repository.findOne({
 			where,
 			order,
@@ -62,13 +63,10 @@ export const findOneTeacher = async (
 	}
 };
 
-export const addTeacher = async (
-	input: Partial<Teacher>
-): Promise<ResponseData> => {
+export const addUser = async (input: Partial<User>): Promise<ResponseData> => {
 	var response: ResponseData = { status: false };
 	try {
-		var data = repository.create({ ...input });
-		data = await repository.save(data);
+		await repository.save({ ...input });
 		return {
 			...response,
 			status: true,
@@ -91,12 +89,12 @@ export const addTeacher = async (
 	}
 };
 
-export const updateTeacher = async (
-	input: Partial<Teacher>
+export const updateUser = async (
+	input: Partial<User>
 ): Promise<ResponseData> => {
 	var response: ResponseData = { status: false };
 	try {
-		const data = await repository.update(input.Id!, input);
+		await repository.update(input.Id!, input);
 
 		return {
 			...response,
@@ -105,7 +103,14 @@ export const updateTeacher = async (
 	} catch (e) {
 		var message = "";
 		if (typeof e === "string") message = e;
-		else if (e instanceof Error) message = e.message;
+		else if (e instanceof Error) {
+			message = e.message;
+			if (message.includes("duplicate key value violates unique constraint"))
+				return {
+					...response,
+					message: ResMessageCommon.duplicate,
+				};
+		}
 		return {
 			...response,
 			message,
@@ -113,8 +118,8 @@ export const updateTeacher = async (
 	}
 };
 
-export const deleteTeacher = async (
-	input: Partial<Teacher>
+export const deleteUser = async (
+	input: Partial<User>
 ): Promise<ResponseData> => {
 	var response: ResponseData = { status: false };
 	try {

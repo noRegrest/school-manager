@@ -1,16 +1,16 @@
 import { FindOptionsOrder, FindOptionsWhere } from "typeorm";
 import AppDataSource from "../data-source";
-import { ResponseData } from "../schemas/common.schema";
 import { Subject } from "../entities/subject";
+import { ResponseData } from "../schemas/common.schema";
 const repository = AppDataSource.getRepository(Subject);
 
 export const findSubjectAll = async (
 	_filter: Partial<Subject> = {},
 	order: FindOptionsOrder<Subject> = { Id: "ASC" }
-): Promise<ResponseData<Subject[]>> => {
+): Promise<ResponseData<Subject[] | null>> => {
 	var response: ResponseData<Subject[]> = { status: false };
 	try {
-		var where: FindOptionsWhere<Subject>[] = [];
+		var where: FindOptionsWhere<Subject> = {};
 
 		var data = await repository.find({
 			where,
@@ -40,7 +40,8 @@ export const findOneSubject = async (
 	var response: ResponseData<Subject | null> = { status: false };
 
 	try {
-		var where: FindOptionsWhere<Subject>[] = [];
+		var where: FindOptionsWhere<Subject> = {};
+		if (_filter.Code) where.Code = _filter.Code;
 		var data = await repository.findOne({
 			where,
 			order,
@@ -67,11 +68,10 @@ export const addSubject = async (
 	var response: ResponseData = { status: false };
 	try {
 		var data = repository.create({ ...input });
-		data = await await repository.save(data);
+		data = await repository.save(data);
 		return {
 			...response,
 			status: true,
-			data,
 		};
 	} catch (e) {
 		var message = "";
@@ -101,7 +101,6 @@ export const updateSubject = async (
 		return {
 			...response,
 			status: true,
-			data,
 		};
 	} catch (e) {
 		var message = "";
@@ -123,7 +122,6 @@ export const deleteSubject = async (
 		return {
 			...response,
 			status: true,
-			data,
 		};
 	} catch (e) {
 		var message = "";
